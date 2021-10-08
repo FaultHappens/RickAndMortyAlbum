@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/episodeListFragment"
+        android:enabled="true"
+        android:icon="@drawable/bottom_navigation_episodes"
+        android:title="@string/bottom_menu_episodes"
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
+    <item
+        android:id="@+id/charactersListFragment"
+        android:enabled="true"
+        android:title="@string/bottom_menu_characters"
+        android:icon="@drawable/bottom_navigation_characters"
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
+</menu>
