@@ -1,7 +1,6 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,15 +43,15 @@ class EpisodeListFragment : Fragment() {
         episodesViewModel.getEpisodes().observe(viewLifecycleOwner, {
             episodesListAdapter.submitList(it.episodes)
         })
-        fragmentEpisodeListBinding.button.setOnClickListener{
-            if(pagesLoaded != pagesTotal){
-                pagesLoaded++
-                episodesViewModel.retrieveEpisodes(pagesLoaded)
-                if(pagesLoaded == pagesTotal){
-                    fragmentEpisodeListBinding.button.isEnabled = false
-                }
-            }
-        }
+//        fragmentEpisodeListBinding.button.setOnClickListener{
+//            if(pagesLoaded != pagesTotal){
+//                pagesLoaded++
+//                episodesViewModel.retrieveEpisodes(pagesLoaded)
+//                if(pagesLoaded == pagesTotal){
+//                    fragmentEpisodeListBinding.button.isEnabled = false
+//                }
+//            }
+//        }
 
     }
 }

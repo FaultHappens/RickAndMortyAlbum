@@ -37,15 +37,19 @@ class CharactersViewModel : ViewModel() {
     fun retrieveCharacters(page: Int) {
         viewModelScope.launch {
             resultList = DataRetriever().getCharacters(page)
+            Log.d("TEST", resultList.toString())
             characters += resultList.characters
             Log.d("TEST", "changing liveData")
             if (charactersPageData.value != null) {
                 val tempData: CharactersPageData? = charactersPageData.value
                 tempData?.characters = characters
+                Log.d("TEST", "Size: ${charactersPageData.value?.characters?.size}")
                 charactersPageData.value = tempData
             } else {
+                Log.d("TEST", "Size: ${charactersPageData.value?.characters?.size}")
                 charactersPageData.value = resultList
             }
+
         }
     }
 

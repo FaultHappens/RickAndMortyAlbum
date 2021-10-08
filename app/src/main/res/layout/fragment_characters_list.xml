@@ -11,12 +11,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/charactersRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="598dp" />
+        android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:text="Button" />
 </LinearLayout>
