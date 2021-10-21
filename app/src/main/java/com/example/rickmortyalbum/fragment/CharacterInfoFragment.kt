@@ -1,6 +1,7 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,9 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.rickmortyalbum.R
-import com.example.rickmortyalbum.adapter.CharactersListAdapter
 import com.example.rickmortyalbum.adapter.EpisodesListAdapter
-import com.example.rickmortyalbum.databinding.CharacterCardViewBinding
+import com.example.rickmortyalbum.adapter.EpisodesPagingListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharacterInfoBinding
-import com.example.rickmortyalbum.viewmodel.CharactersViewModel
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
 
 class CharacterInfoFragment : Fragment() {
@@ -40,11 +38,9 @@ class CharacterInfoFragment : Fragment() {
                 item
             ))
         }
-        fragmentCharacterInfoBinding.recyclerView.layoutManager =
-            LinearLayoutManager(activity?.applicationContext)
+        fragmentCharacterInfoBinding.recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
         fragmentCharacterInfoBinding.recyclerView.adapter = episodesListAdapter
         viewModel.progressBar = fragmentCharacterInfoBinding.simpleProgressBar
-
         initInfoPage()
     }
 
@@ -53,17 +49,16 @@ class CharacterInfoFragment : Fragment() {
         fragmentCharacterInfoBinding.characterNameTV.text = args.character.name
         fragmentCharacterInfoBinding.characterSpeciesTV.text = args.character.species
         fragmentCharacterInfoBinding.characterStatusTV.text = args.character.status
+        viewModel.episodesData.observe(viewLifecycleOwner, {
+            episodesListAdapter.submitList(it)
+            fragmentCharacterInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
+        })
 
         context?.let {
             Glide.with(it)
                 .load(args.character.image)
                 .into(fragmentCharacterInfoBinding.characterImageIV)
         }
-
-        viewModel.episodesData.observe(viewLifecycleOwner, {
-            episodesListAdapter.submitList(it)
-            fragmentCharacterInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
-        })
         viewModel.getEpisodesDataWithID(args.character.episode)
 
     }

@@ -5,10 +5,13 @@ import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.CharactersPageData
 import com.example.rickmortyalbum.retriever.DataRetriever
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,37 +23,12 @@ class CharactersViewModel : ViewModel() {
         MutableLiveData<CharactersPageData>()
     }
 
-    init {
-        viewModelScope.launch {
-            retrieveCharacters(1)
-        }
-    }
-
     private lateinit var resultList: CharactersPageData
     lateinit var progressBar: ProgressBar
     val characters = mutableListOf<CharacterData>()
 
-    fun getCharacters(): MutableLiveData<CharactersPageData> {
-        return charactersPageData
-    }
-
-    fun retrieveCharacters(page: Int) {
-        viewModelScope.launch {
-            resultList = DataRetriever().getCharacters(page)
-            Log.d("TEST", resultList.toString())
-            characters += resultList.characters
-            Log.d("TEST", "changing liveData")
-            if (charactersPageData.value != null) {
-                val tempData: CharactersPageData? = charactersPageData.value
-                tempData?.characters = characters
-                Log.d("TEST", "Size: ${charactersPageData.value?.characters?.size}")
-                charactersPageData.value = tempData
-            } else {
-                Log.d("TEST", "Size: ${charactersPageData.value?.characters?.size}")
-                charactersPageData.value = resultList
-            }
-
-        }
+    fun getCharacters(): Flow<PagingData<CharacterData>> {
+        return DataRetriever().getCharacters().cachedIn(viewModelScope)
     }
 
     fun getCharactersWithID(characterUrls: List<String>) {

@@ -1,18 +1,18 @@
 package com.example.rickmortyalbum.retriever
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.example.rickmortyalbum.api.API
-import com.example.rickmortyalbum.data.CharacterData
-import com.example.rickmortyalbum.data.CharactersPageData
-import com.example.rickmortyalbum.data.EpisodeData
-import com.example.rickmortyalbum.data.EpisodesPageData
+import com.example.rickmortyalbum.data.*
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class DataRetriever {
     private val service: API
-    companion object {
-        const val BASE_URL = "https://rickandmortyapi.com/api/"
-    }
+    val BASE_URL = "https://rickandmortyapi.com/api/"
 
     init {
         val retrofit = Retrofit.Builder()
@@ -22,11 +22,30 @@ class DataRetriever {
         service = retrofit.create(API::class.java)
     }
 
-    suspend fun getEpisodes(page: Int): EpisodesPageData =
-        service.getEpisodesListAPI(page)
+    fun getEpisodes(): Flow<PagingData<EpisodeData>>{
+        return Pager(
+            config = PagingConfig(
+                pageSize = 30,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                EpisodesPagingSource(service = service)
+            }
+        ).flow
+    }
 
-    suspend fun getCharacters(page: Int): CharactersPageData =
-        service.getCharactersAPI(page)
+
+    fun getCharacters(): Flow<PagingData<CharacterData>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 30,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                CharactersPagingSource(service = service)
+            }
+        ).flow
+    }
 
     suspend fun getCharacterWithID(id: String): CharacterData =
         service.getCharacterAPI("character/$id")
