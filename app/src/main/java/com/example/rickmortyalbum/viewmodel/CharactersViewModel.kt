@@ -9,6 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.CharactersPageData
+import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.retriever.DataRetriever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -31,11 +32,16 @@ class CharactersViewModel : ViewModel() {
         return DataRetriever().getCharacters().cachedIn(viewModelScope)
     }
 
-    fun getCharactersWithID(characterUrls: List<String>) {
+    fun getCharactersWithID(characterUrls: List<String>,  db: CharactersDB) {
+        Log.d("LOL", "IMMA HERE")
 
         viewModelScope.launch(Dispatchers.IO) {
             for (i in characterUrls) {
-                characters.add(DataRetriever().getCharacterWithID(i.substring(41)))
+                //val characterDao = db.characterDao()
+                val characterID: Int = i.substring(41).toInt()
+                //val character: CharacterData = characterDao.getByID(characterID)
+                ///Log.d("LOLKEK", character.toString())
+                characters.add(DataRetriever().getCharacterWithID(characterID.toString()))
                 progressBar.progress += 100 / characterUrls.count()
             }
             withContext(Dispatchers.Main) {

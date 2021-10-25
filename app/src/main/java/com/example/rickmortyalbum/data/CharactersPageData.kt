@@ -1,5 +1,8 @@
 package com.example.rickmortyalbum.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -15,28 +18,16 @@ data class Info(
     val pages: Int,
     val prev: Any
 )
-
+@Entity
 data class CharacterData(
     val created: String,
     val episode: List<String>,
     val gender: String,
-    val id: Int,
+    @PrimaryKey val id: Int,
     val image: String,
-    val location: Location,
     val name: String,
-    val origin: Origin,
     val species: String,
     val status: String,
     val type: String,
     val url: String
 ): Serializable
-
-data class Location(
-    val name: String,
-    val url: String
-)
-
-data class Origin(
-    val name: String,
-    val url: String
-)

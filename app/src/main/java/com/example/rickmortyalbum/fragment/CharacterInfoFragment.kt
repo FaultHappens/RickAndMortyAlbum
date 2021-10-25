@@ -10,10 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.adapter.EpisodesListAdapter
 import com.example.rickmortyalbum.adapter.EpisodesPagingListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharacterInfoBinding
+import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
 
 class CharacterInfoFragment : Fragment() {
@@ -22,6 +24,7 @@ class CharacterInfoFragment : Fragment() {
     private val args: CharacterInfoFragmentArgs by navArgs()
     private lateinit var fragmentCharacterInfoBinding: FragmentCharacterInfoBinding
     private lateinit var episodesListAdapter: EpisodesListAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

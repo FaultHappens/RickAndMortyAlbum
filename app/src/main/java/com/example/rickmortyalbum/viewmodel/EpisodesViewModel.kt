@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.EpisodeData
+import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.retriever.DataRetriever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
