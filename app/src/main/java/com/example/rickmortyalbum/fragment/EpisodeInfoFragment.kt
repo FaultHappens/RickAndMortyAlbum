@@ -34,6 +34,7 @@ class EpisodeInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Todo ბაზას აქ არ უნდა ქმნიდე, ცალკე უნდა გქონდეს როგორც რეთრაივერია, რეპოზიტორი და ვიუმოდელიდან იძახებდე მეთოდს, მერე ფრაგმენტშ ლაივდატით დაააბრუნებ
         db = activity?.applicationContext?.let {
             Room.databaseBuilder(
                 it,

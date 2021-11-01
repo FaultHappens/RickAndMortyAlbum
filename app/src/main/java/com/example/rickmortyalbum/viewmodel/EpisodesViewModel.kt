@@ -21,6 +21,8 @@ class EpisodesViewModel : ViewModel() {
         MutableLiveData<MutableList<EpisodeData>>()
     }
     lateinit var progressBar: ProgressBar
+    //Todo ესე არ შეიძლება იდეც წერს რომ მემორი ლიქია, ვიუს კომპონენტის ინსტანტს სხვა სრედში წვდები,
+    // თან იდეურადაც არასწორია ვიუმოდელში არ უნდა იყოს, აქ უნდა გქონდეს პროგრესის ლაივდატა, და ვიუში ობზერვზე განაახლებ
     fun getEpisodes(): Flow<PagingData<EpisodeData>> {
         return DataRetriever().getEpisodes().cachedIn(viewModelScope)
     }
@@ -31,7 +33,8 @@ class EpisodesViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val episodes = mutableListOf<EpisodeData>()
             for (i in episodeUrls) {
-                progressBar.progress += 100 / episodeUrls.count()
+                progressBar.progress += 100 / episodeUrls.count()//Todo ესე ჩაჰარდკოდებული არ უნდა იყოს,
+                // მინიმუმ კონსტანტად მაინც უნდა აღწერო ეს 40 რა არის
                 episodes.add(DataRetriever().getEpisodeWithId(i.substring(40)))
             }
             withContext(Dispatchers.Main) {

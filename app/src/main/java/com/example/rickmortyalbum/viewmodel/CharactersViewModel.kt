@@ -25,7 +25,7 @@ class CharactersViewModel : ViewModel() {
     }
 
     private lateinit var resultList: CharactersPageData
-    lateinit var progressBar: ProgressBar
+    lateinit var progressBar: ProgressBar// Todo იგივე რაც ეპიზოდებში
     val characters = mutableListOf<CharacterData>()
 
     fun getCharacters(): Flow<PagingData<CharacterData>> {
@@ -37,7 +37,7 @@ class CharactersViewModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             for (i in characterUrls) {
-                //val characterDao = db.characterDao()
+                //val characterDao = db.characterDao()// Todo იგივე რაც ეპიზოდებში
                 val characterID: Int = i.substring(41).toInt()
                 //val character: CharacterData = characterDao.getByID(characterID)
                 ///Log.d("LOLKEK", character.toString())

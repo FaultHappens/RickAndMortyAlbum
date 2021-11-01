@@ -49,6 +49,7 @@ class EpisodesPagingListViewHolder(private val binding: EpisodeCardViewBinding) 
     fun bind(item: EpisodeData?, listener: (EpisodeData) -> Unit) {
         item?.let {
             if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
+                //Todo თუ არ შესრულდა პირობა რა ფერი უნდა ჰქონდეს გაუწერე, ამ ითემის რესაიკლი თუ მოხდა შეიძლება ისეთზეც ეს ფერი დახატოს სადაც არ უნდა ყოფილიყო
         }
         binding.episodeAirDateTV.text = item?.air_date ?: "No Info"
         binding.episodeNameTV.text = item?.name ?: "No Info"

@@ -49,6 +49,8 @@ class CharactersPagingListViewHolder(
         Log.d("LOL", "binding + ${item.toString()}")
         item?.let {
             if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
+            // Todo იგივე რაც EpisodesPagingListAdapter ში, კოდი მოსაწესრიგებელია
+
             Glide.with(binding.root)
                 .load(item.image)
                 .into(binding.characterImageIV)

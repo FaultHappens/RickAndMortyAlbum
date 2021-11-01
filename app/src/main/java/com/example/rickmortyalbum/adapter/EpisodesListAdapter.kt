@@ -50,6 +50,7 @@ class EpisodesListViewHolder(private val binding: EpisodeCardViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: EpisodeData) {
         if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
+        // Todo იგივე რაც EpisodesPagingListAdapter ში, კოდი მოსაწესრიგებელია
 
         binding.episodeAirDateTV.text = item.air_date ?: "No Info"
         binding.episodeNameTV.text = item.name ?: "No Info"

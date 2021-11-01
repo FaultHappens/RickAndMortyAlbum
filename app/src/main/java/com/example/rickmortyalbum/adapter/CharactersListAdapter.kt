@@ -47,6 +47,8 @@ class CharactersListViewHolder(private val binding: CharacterCardViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: CharacterData) {
         if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
+        // Todo იგივე რაც EpisodesPagingListAdapter ში, კოდი მოსაწესრიგებელია
+
         Glide.with(binding.root)
             .load(item.image)
             .into(binding.characterImageIV)
