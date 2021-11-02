@@ -1,7 +1,6 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.adapter.EpisodesListAdapter
-import com.example.rickmortyalbum.adapter.EpisodesPagingListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharacterInfoBinding
-import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
 
 class CharacterInfoFragment : Fragment() {
@@ -36,14 +32,13 @@ class CharacterInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        episodesListAdapter = EpisodesListAdapter(){item->
+        episodesListAdapter = EpisodesListAdapter{item->
             Navigation.findNavController(view).navigate(CharacterInfoFragmentDirections.actionCharacterInfoFragmentToEpisodeInfoFragment(
                 item
             ))
         }
         fragmentCharacterInfoBinding.recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
         fragmentCharacterInfoBinding.recyclerView.adapter = episodesListAdapter
-        viewModel.progressBar = fragmentCharacterInfoBinding.simpleProgressBar
         initInfoPage()
     }
 
@@ -55,6 +50,9 @@ class CharacterInfoFragment : Fragment() {
         viewModel.episodesData.observe(viewLifecycleOwner, {
             episodesListAdapter.submitList(it)
             fragmentCharacterInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
+        })
+        viewModel.progressLiveData.observe(viewLifecycleOwner, {
+            fragmentCharacterInfoBinding.simpleProgressBar.progress = it
         })
 
         context?.let {

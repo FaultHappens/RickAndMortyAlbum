@@ -1,7 +1,6 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,7 @@ class EpisodeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        episodesPagingListAdapter = EpisodesPagingListAdapter(){item->
+        episodesPagingListAdapter = EpisodesPagingListAdapter{item->
             Navigation.findNavController(view).navigate(EpisodeListFragmentDirections.actionEpisodeListFragmentToEpisodeInfoFragment(
                 item
             ))

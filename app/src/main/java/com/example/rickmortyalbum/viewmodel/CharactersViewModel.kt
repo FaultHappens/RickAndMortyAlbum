@@ -1,53 +1,77 @@
 package com.example.rickmortyalbum.viewmodel
 
+import android.app.Application
 import android.util.Log
-import android.widget.ProgressBar
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.rickmortyalbum.data.CharacterData
-import com.example.rickmortyalbum.data.CharactersPageData
 import com.example.rickmortyalbum.db.CharactersDB
+import com.example.rickmortyalbum.db.CharactersDBRepository
 import com.example.rickmortyalbum.retriever.DataRetriever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CharactersViewModel : ViewModel() {
+class CharactersViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository: CharactersDBRepository
+
+    init {
+        val charactersDB = CharactersDB.getDatabase(application).characterDao()
+        repository = CharactersDBRepository(charactersDB)
+
+    }
+
     val charactersData: MutableLiveData<MutableList<CharacterData>> by lazy {
         MutableLiveData<MutableList<CharacterData>>()
     }
-    val charactersPageData: MutableLiveData<CharactersPageData> by lazy {
-        MutableLiveData<CharactersPageData>()
+
+
+    val progressLiveData: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
-    private lateinit var resultList: CharactersPageData
-    lateinit var progressBar: ProgressBar// Todo იგივე რაც ეპიზოდებში
     val characters = mutableListOf<CharacterData>()
 
     fun getCharacters(): Flow<PagingData<CharacterData>> {
         return DataRetriever().getCharacters().cachedIn(viewModelScope)
     }
 
-    fun getCharactersWithID(characterUrls: List<String>,  db: CharactersDB) {
-        Log.d("LOL", "IMMA HERE")
+    fun getCharactersWithID(characterUrls: List<String>) {
+        progressLiveData.value = 0
 
         viewModelScope.launch(Dispatchers.IO) {
             for (i in characterUrls) {
-                //val characterDao = db.characterDao()// Todo იგივე რაც ეპიზოდებში
-                val characterID: Int = i.substring(41).toInt()
-                //val character: CharacterData = characterDao.getByID(characterID)
-                ///Log.d("LOLKEK", character.toString())
-                characters.add(DataRetriever().getCharacterWithID(characterID.toString()))
-                progressBar.progress += 100 / characterUrls.count()
+                val characterID: Int = i.substring(CHARACTER_ID_START_INDEX).toInt()
+                var character: CharacterData? = repository.getById(characterID)
+                if (character == null) {
+                    Log.d("LOL", "Getting character from API")
+                    character = DataRetriever().getCharacterWithID(characterID.toString())
+                    characters.add(character)
+                    repository.insert(character)
+                } else {
+                    Log.d("LOL", "Getting character from DB")
+                    characters.add(character)
+                }
+                withContext(Dispatchers.Main) {
+                    progressLiveData.value =
+                        progressLiveData.value?.plus(100 / characterUrls.count())
+                }
             }
             withContext(Dispatchers.Main) {
                 charactersData.value = characters as ArrayList<CharacterData>
             }
         }
+    }
+
+
+    companion object {
+        const val CHARACTER_ID_START_INDEX = 42
     }
 
 }

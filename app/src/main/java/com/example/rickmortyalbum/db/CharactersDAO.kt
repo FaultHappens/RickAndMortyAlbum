@@ -1,5 +1,6 @@
 package com.example.rickmortyalbum.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,7 +16,7 @@ interface CharactersDAO {
     fun getByID(characterID: Int): CharacterData
 
     @Insert
-    fun insert(vararg users: CharacterData)
+    fun insert(vararg user: CharacterData)
 
     @Delete
     fun delete(user: CharacterData)

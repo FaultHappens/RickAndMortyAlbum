@@ -1,6 +1,5 @@
 package com.example.rickmortyalbum.data
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -18,6 +17,7 @@ data class Info(
     val pages: Int,
     val prev: Any
 )
+
 @Entity
 data class CharacterData(
     val created: String,
@@ -30,4 +30,4 @@ data class CharacterData(
     val status: String,
     val type: String,
     val url: String
-): Serializable
+) : Serializable

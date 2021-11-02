@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.rickmortyalbum.adapter.CharactersPagingListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharactersListBinding
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
@@ -24,7 +23,6 @@ class CharactersListFragment : Fragment() {
     private val charactersViewModel: CharactersViewModel by viewModels()
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,8 +33,12 @@ class CharactersListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        charactersPagingListAdapter = CharactersPagingListAdapter(){
-            Navigation.findNavController(view).navigate(CharactersListFragmentDirections.actionCharactersListFragmentToCharacterInfoFragment(it))
+        charactersPagingListAdapter = CharactersPagingListAdapter {
+            Navigation.findNavController(view).navigate(
+                CharactersListFragmentDirections.actionCharactersListFragmentToCharacterInfoFragment(
+                    it
+                )
+            )
         }
         fragmentCharactersListBinding.charactersRecyclerView.layoutManager =
             LinearLayoutManager(activity?.applicationContext)

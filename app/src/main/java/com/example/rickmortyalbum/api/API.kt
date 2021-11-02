@@ -16,9 +16,9 @@ interface API {
     @GET("character")
     suspend fun getCharactersAPI(@Query("page") page: Int): Response<CharactersPageData>
 
-    @GET()
+    @GET
     suspend fun getCharacterAPI(@Url url: String): CharacterData
 
-    @GET()
+    @GET
     suspend fun getEpisodeAPI(@Url url: String): EpisodeData
 }

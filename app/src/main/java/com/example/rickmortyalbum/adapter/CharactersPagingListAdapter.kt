@@ -1,15 +1,15 @@
 package com.example.rickmortyalbum.adapter
 
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.rickmortyalbum.R
 import com.example.rickmortyalbum.data.CharacterData
-import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.databinding.CharacterCardViewBinding
 
 class CharactersPagingListAdapter(private val listener: (CharacterData) -> Unit) :
@@ -27,14 +27,17 @@ class CharactersPagingListAdapter(private val listener: (CharacterData) -> Unit)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersPagingListViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CharactersPagingListViewHolder {
         binding =
             CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersPagingListViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: com.example.rickmortyalbum.adapter.CharactersPagingListViewHolder,
+        holder: CharactersPagingListViewHolder,
         position: Int
     ) {
         holder.bind(getItem(position), listener)
@@ -42,14 +45,24 @@ class CharactersPagingListAdapter(private val listener: (CharacterData) -> Unit)
 }
 
 class CharactersPagingListViewHolder(
-    val binding: CharacterCardViewBinding
+    private val binding: CharacterCardViewBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: CharacterData?, listener: (CharacterData) -> Unit) {
         Log.d("LOL", "binding + ${item.toString()}")
         item?.let {
-            if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
-            // Todo იგივე რაც EpisodesPagingListAdapter ში, კოდი მოსაწესრიგებელია
+            if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    R.color.card_background_color_1
+                )
+            )
+            else binding.cardView.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    R.color.card_background_color_2
+                )
+            )
 
             Glide.with(binding.root)
                 .load(item.image)

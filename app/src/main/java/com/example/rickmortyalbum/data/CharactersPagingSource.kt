@@ -32,6 +32,7 @@ class CharactersPagingSource(private val service: API) :
             LoadResult.Error(e)
         }
     }
+
     override fun getRefreshKey(state: PagingState<Int, CharacterData>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)

@@ -1,12 +1,12 @@
 package com.example.rickmortyalbum.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.rickmortyalbum.R
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.databinding.EpisodeCardViewBinding
 
@@ -27,14 +27,14 @@ class EpisodesPagingListAdapter(private val listener: (EpisodeData) -> Unit) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): com.example.rickmortyalbum.adapter.EpisodesPagingListViewHolder {
+    ): EpisodesPagingListViewHolder {
         binding = EpisodeCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return EpisodesPagingListViewHolder(binding)
     }
 
     override fun onBindViewHolder(
-        holder: com.example.rickmortyalbum.adapter.EpisodesPagingListViewHolder,
+        holder: EpisodesPagingListViewHolder,
         position: Int
     ) {
         holder.itemView.setOnClickListener { getItem(position)?.let { it1 -> listener(it1) } }
@@ -48,8 +48,10 @@ class EpisodesPagingListViewHolder(private val binding: EpisodeCardViewBinding) 
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: EpisodeData?, listener: (EpisodeData) -> Unit) {
         item?.let {
-            if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(Color.parseColor("#FF9787"))
-                //Todo თუ არ შესრულდა პირობა რა ფერი უნდა ჰქონდეს გაუწერე, ამ ითემის რესაიკლი თუ მოხდა შეიძლება ისეთზეც ეს ფერი დახატოს სადაც არ უნდა ყოფილიყო
+            if (item.id % 2 == 1) binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,
+                R.color.card_background_color_1))
+            else binding.cardView.setCardBackgroundColor(ContextCompat.getColor(binding.root.context,
+                R.color.card_background_color_2))
         }
         binding.episodeAirDateTV.text = item?.air_date ?: "No Info"
         binding.episodeNameTV.text = item?.name ?: "No Info"

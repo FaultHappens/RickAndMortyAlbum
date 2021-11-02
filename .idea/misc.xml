@@ -14,8 +14,14 @@
         <entry key="..\:/Users/Dimitri/AndroidStudioProjects/RickMortyAlbum/app/src/main/res/layout/progress_loading.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Dimitri/AndroidStudioProjects/RickMortyAlbum/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/character_card_view.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/episode_card_view.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/fragment_character_info.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/fragment_characters_list.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/fragment_episode_info.xml" value="0.25" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/fragment_episode_list.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/layout/progress_loading.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/tskit/AndroidStudioProjects/RickAndMortyAlbum/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.12708333333333333" />
       </map>
     </option>
   </component>

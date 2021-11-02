@@ -1,7 +1,6 @@
 package com.example.rickmortyalbum.data
 
 import android.net.Uri
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.rickmortyalbum.api.API
@@ -31,6 +30,7 @@ class EpisodesPagingSource(private val service: API) :
             LoadResult.Error(e)
         }
     }
+
     override fun getRefreshKey(state: PagingState<Int, EpisodeData>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)

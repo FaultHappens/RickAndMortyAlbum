@@ -3,11 +3,10 @@
     <string name="air_date">Air Date</string>
     <string name="characters">Characters</string>
     <string name="status">Status:</string>
-    <string name="character_image">Character Image</string>
     <string name="gender">Gender:</string>
     <string name="episodes">Episodes</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="bottom_menu_episodes">Episodes</string>
     <string name="bottom_menu_characters">Characters</string>
+    <string name="character_image">Character Image</string>
 </resources>
