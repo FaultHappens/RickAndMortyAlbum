@@ -16,9 +16,10 @@ import com.example.rickmortyalbum.data.Converters
 import com.example.rickmortyalbum.databinding.FragmentEpisodeInfoBinding
 import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class EpisodeInfoFragment : Fragment() {
-    private val viewModel: CharactersViewModel by viewModels()
+    private val viewModel: CharactersViewModel by viewModel()
     private val args: EpisodeInfoFragmentArgs by navArgs()
     private lateinit var charactersListAdapter: CharactersListAdapter
     private lateinit var fragmentEpisodeInfoBinding: FragmentEpisodeInfoBinding
@@ -32,13 +33,6 @@ class EpisodeInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Todo ბაზას აქ არ უნდა ქმნიდე, ცალკე უნდა გქონდეს როგორც რეთრაივერია, რეპოზიტორი და ვიუმოდელიდან იძახებდე მეთოდს, მერე ფრაგმენტშ ლაივდატით დაააბრუნებ
-//        val db = activity?.applicationContext?.let {
-//            Room.databaseBuilder(
-//                it,
-//                CharactersDB::class.java, "database-name"
-//            ).addTypeConverter(Converters).build()
-//        }
         charactersListAdapter = CharactersListAdapter {
             Navigation.findNavController(view).navigate(
                 EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(it)

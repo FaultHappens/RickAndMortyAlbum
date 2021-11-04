@@ -18,17 +18,7 @@ abstract class CharactersDB : RoomDatabase() {
         @Volatile
         private var INSTANCE: CharactersDB? = null
 
-        fun getDatabase(context: Context): CharactersDB {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    CharactersDB::class.java,
-                    "characters_db"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
+
     }
 
 }

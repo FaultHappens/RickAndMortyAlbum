@@ -14,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DataRetriever {
     private val service: API
+
     private val baseUrl = "https://rickandmortyapi.com/api/"
 
     init {

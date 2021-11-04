@@ -17,15 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CharactersViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository: CharactersDBRepository
-
-    init {
-        val charactersDB = CharactersDB.getDatabase(application).characterDao()
-        repository = CharactersDBRepository(charactersDB)
-
-    }
+class CharactersViewModel(application: Application, private val repository: CharactersDBRepository) : AndroidViewModel(application) {
 
     val charactersData: MutableLiveData<MutableList<CharacterData>> by lazy {
         MutableLiveData<MutableList<CharacterData>>()

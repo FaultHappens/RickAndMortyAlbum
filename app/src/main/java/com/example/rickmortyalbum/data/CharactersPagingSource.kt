@@ -6,8 +6,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.rickmortyalbum.api.API
 
-class CharactersPagingSource(private val service: API) :
-    PagingSource<Int, CharacterData>() {
+class CharactersPagingSource(private val service: API) : PagingSource<Int, CharacterData>() {
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CharacterData> {
         val pageNumber = params.key ?: 1
         return try {

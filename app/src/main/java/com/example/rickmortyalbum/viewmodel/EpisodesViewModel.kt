@@ -15,14 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EpisodesViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository: EpisodesDBRepository
-
-    init {
-        val episodesDB = EpisodesDB.getDatabase(application).episodesDao()
-        repository = EpisodesDBRepository(episodesDB)
-    }
+class EpisodesViewModel(application: Application, private val repository: EpisodesDBRepository) : AndroidViewModel(application) {
 
     val episodesData: MutableLiveData<MutableList<EpisodeData>> by lazy {
         MutableLiveData<MutableList<EpisodeData>>()

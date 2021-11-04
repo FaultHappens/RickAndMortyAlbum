@@ -12,16 +12,24 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyalbum.adapter.CharactersPagingListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharactersListBinding
+import com.example.rickmortyalbum.di.modules
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.startKoin
+import org.koin.core.context.unloadKoinModules
 
 class CharactersListFragment : Fragment() {
 
+
     private lateinit var fragmentCharactersListBinding: FragmentCharactersListBinding
     private lateinit var charactersPagingListAdapter: CharactersPagingListAdapter
-    private val charactersViewModel: CharactersViewModel by viewModels()
-
+    private val charactersViewModel: CharactersViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

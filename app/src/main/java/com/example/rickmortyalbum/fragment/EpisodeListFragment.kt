@@ -14,12 +14,13 @@ import com.example.rickmortyalbum.databinding.FragmentEpisodeListBinding
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class EpisodeListFragment : Fragment() {
 
     private lateinit var fragmentEpisodeListBinding: FragmentEpisodeListBinding
     private lateinit var episodesPagingListAdapter: EpisodesPagingListAdapter
-    private val episodesViewModel: EpisodesViewModel by viewModels()
+    private val episodesViewModel: EpisodesViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

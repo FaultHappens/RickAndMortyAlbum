@@ -13,10 +13,11 @@ import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.adapter.EpisodesListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharacterInfoBinding
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class CharacterInfoFragment : Fragment() {
 
-    private val viewModel: EpisodesViewModel by viewModels()
+    private val viewModel: EpisodesViewModel by viewModel()
     private val args: CharacterInfoFragmentArgs by navArgs()
     private lateinit var fragmentCharacterInfoBinding: FragmentCharacterInfoBinding
     private lateinit var episodesListAdapter: EpisodesListAdapter
