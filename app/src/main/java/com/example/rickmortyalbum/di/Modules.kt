@@ -1,7 +1,6 @@
 package com.example.rickmortyalbum.di
 
 import androidx.room.Room
-import com.example.rickmortyalbum.BuildConfig
 import com.example.rickmortyalbum.api.API
 import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.db.CharactersDBRepository

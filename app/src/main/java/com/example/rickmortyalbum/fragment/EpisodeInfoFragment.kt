@@ -1,20 +1,15 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.example.rickmortyalbum.adapter.CharactersListAdapter
-import com.example.rickmortyalbum.data.Converters
 import com.example.rickmortyalbum.databinding.FragmentEpisodeInfoBinding
-import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 

@@ -1,12 +1,10 @@
 package com.example.rickmortyalbum.db
 
-import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.Converters
-import com.google.gson.Gson
-
-
 
 
 @Database(entities = [CharacterData::class], version = 1)

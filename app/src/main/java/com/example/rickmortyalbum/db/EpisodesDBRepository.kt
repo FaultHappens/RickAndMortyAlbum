@@ -5,11 +5,11 @@ import com.example.rickmortyalbum.data.EpisodeData
 
 class EpisodesDBRepository(private val episodesDAO: EpisodesDAO) {
     @WorkerThread
-    suspend fun insert(episode: EpisodeData){
+    fun insert(episode: EpisodeData){
         episodesDAO.insert(episode)
     }
     @WorkerThread
-    suspend fun delete(episode: EpisodeData){
+    fun delete(episode: EpisodeData){
         episodesDAO.delete(episode)
     }
 
