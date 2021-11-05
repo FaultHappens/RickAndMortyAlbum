@@ -31,8 +31,7 @@ class CharactersPagingListAdapter(private val listener: (CharacterData) -> Unit)
         parent: ViewGroup,
         viewType: Int
     ): CharactersPagingListViewHolder {
-        binding =
-            CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersPagingListViewHolder(binding)
     }
 
@@ -44,9 +43,8 @@ class CharactersPagingListAdapter(private val listener: (CharacterData) -> Unit)
     }
 }
 
-class CharactersPagingListViewHolder(
-    private val binding: CharacterCardViewBinding
-) : RecyclerView.ViewHolder(binding.root) {
+class CharactersPagingListViewHolder(private val binding: CharacterCardViewBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: CharacterData?, listener: (CharacterData) -> Unit) {
         Log.d("LOL", "binding + ${item.toString()}")

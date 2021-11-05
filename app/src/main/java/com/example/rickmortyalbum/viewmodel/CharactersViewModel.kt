@@ -4,12 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.rickmortyalbum.data.CharacterData
-import com.example.rickmortyalbum.db.CharactersDB
 import com.example.rickmortyalbum.db.CharactersDBRepository
 import com.example.rickmortyalbum.retriever.DataRetriever
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +15,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CharactersViewModel(application: Application, private val repository: CharactersDBRepository) : AndroidViewModel(application) {
+class CharactersViewModel(application: Application,
+                          private val repository: CharactersDBRepository,
+                          private val dataRetriever: DataRetriever) : AndroidViewModel(application) {
 
     val charactersData: MutableLiveData<MutableList<CharacterData>> by lazy {
         MutableLiveData<MutableList<CharacterData>>()
@@ -31,7 +31,7 @@ class CharactersViewModel(application: Application, private val repository: Char
     val characters = mutableListOf<CharacterData>()
 
     fun getCharacters(): Flow<PagingData<CharacterData>> {
-        return DataRetriever().getCharacters().cachedIn(viewModelScope)
+        return dataRetriever.getCharacters().cachedIn(viewModelScope)
     }
 
     fun getCharactersWithID(characterUrls: List<String>) {
@@ -43,7 +43,7 @@ class CharactersViewModel(application: Application, private val repository: Char
                 var character: CharacterData? = repository.getById(characterID)
                 if (character == null) {
                     Log.d("LOL", "Getting character from API")
-                    character = DataRetriever().getCharacterWithID(characterID.toString())
+                    character = dataRetriever.getCharacterWithID(characterID.toString())
                     characters.add(character)
                     repository.insert(character)
                 } else {

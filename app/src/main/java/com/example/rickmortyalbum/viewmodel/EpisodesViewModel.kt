@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EpisodesViewModel(application: Application, private val repository: EpisodesDBRepository) : AndroidViewModel(application) {
+class EpisodesViewModel(application: Application,
+                        private val repository: EpisodesDBRepository,
+                        private val dataRetriever: DataRetriever) : AndroidViewModel(application) {
 
     val episodesData: MutableLiveData<MutableList<EpisodeData>> by lazy {
         MutableLiveData<MutableList<EpisodeData>>()
@@ -27,7 +29,7 @@ class EpisodesViewModel(application: Application, private val repository: Episod
 
 
     fun getEpisodes(): Flow<PagingData<EpisodeData>> {
-        return DataRetriever().getEpisodes().cachedIn(viewModelScope)
+        return dataRetriever.getEpisodes().cachedIn(viewModelScope)
     }
 
 
@@ -42,7 +44,7 @@ class EpisodesViewModel(application: Application, private val repository: Episod
 
                 if (episode == null) {
                     Log.d("LOL", "Getting episode from API")
-                    episode = DataRetriever().getEpisodeWithId(episodeID.toString())
+                    episode = dataRetriever.getEpisodeWithId(episodeID.toString())
                     episodes.add(episode)
                     repository.insert(episode)
                 } else {

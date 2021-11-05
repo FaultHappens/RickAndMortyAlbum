@@ -1,6 +1,8 @@
 package com.example.rickmortyalbum
 
 import android.app.Application
+import com.example.rickmortyalbum.di.charactersModule
+import com.example.rickmortyalbum.di.episodesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -9,9 +11,8 @@ class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin{
-            androidLogger()
             androidContext(this@MainApplication)
-            modules(com.example.rickmortyalbum.di.modules)
+            modules(listOf(com.example.rickmortyalbum.di.module, charactersModule, episodesModule))
         }
     }
 }

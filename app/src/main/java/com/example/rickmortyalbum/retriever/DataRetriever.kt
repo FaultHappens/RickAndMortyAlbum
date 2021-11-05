@@ -9,21 +9,9 @@ import com.example.rickmortyalbum.data.CharactersPagingSource
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.data.EpisodesPagingSource
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class DataRetriever {
-    private val service: API
-
+class DataRetriever(private val service: API) {
     private val baseUrl = "https://rickandmortyapi.com/api/"
-
-    init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        service = retrofit.create(API::class.java)
-    }
 
     fun getEpisodes(): Flow<PagingData<EpisodeData>> {
         return Pager(
