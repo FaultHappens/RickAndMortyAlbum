@@ -3,6 +3,7 @@ package com.example.rickmortyalbum.retriever
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.rxjava2.flowable
 import com.example.rickmortyalbum.api.API
 import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.CharactersPagingSource
@@ -11,9 +12,7 @@ import com.example.rickmortyalbum.data.EpisodesPagingSource
 import kotlinx.coroutines.flow.Flow
 
 class DataRetriever(private val service: API) {
-    private val baseUrl = "https://rickandmortyapi.com/api/"
-
-    fun getEpisodes(): Flow<PagingData<EpisodeData>> {
+    fun getEpisodes(): Pager<Int, EpisodeData>{
         return Pager(
             config = PagingConfig(
                 pageSize = 30,
@@ -22,11 +21,12 @@ class DataRetriever(private val service: API) {
             pagingSourceFactory = {
                 EpisodesPagingSource(service = service)
             }
-        ).flow
+        )
     }
 
 
-    fun getCharacters(): Flow<PagingData<CharacterData>> {
+
+    fun getCharacters(): Pager<Int, CharacterData>{
         return Pager(
             config = PagingConfig(
                 pageSize = 30,
@@ -35,7 +35,7 @@ class DataRetriever(private val service: API) {
             pagingSourceFactory = {
                 CharactersPagingSource(service = service)
             }
-        ).flow
+        )
     }
 
     suspend fun getCharacterWithID(id: String): CharacterData =

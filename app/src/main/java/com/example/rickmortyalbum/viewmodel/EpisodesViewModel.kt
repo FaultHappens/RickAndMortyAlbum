@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.rxjava2.flowable
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.db.*
 import com.example.rickmortyalbum.retriever.DataRetriever
+import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -28,8 +30,8 @@ class EpisodesViewModel(application: Application,
     }
 
 
-    fun getEpisodes(): Flow<PagingData<EpisodeData>> {
-        return dataRetriever.getEpisodes().cachedIn(viewModelScope)
+    fun getEpisodes(): Flowable<PagingData<EpisodeData>> {
+        return dataRetriever.getEpisodes().flowable
     }
 
 

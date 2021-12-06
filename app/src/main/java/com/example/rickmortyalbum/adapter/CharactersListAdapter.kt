@@ -35,8 +35,7 @@ class CharactersListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {
-        binding =
-            CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersListViewHolder(binding)
     }
 
