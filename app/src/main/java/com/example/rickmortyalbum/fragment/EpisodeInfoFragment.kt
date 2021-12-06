@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyalbum.adapter.CharactersListAdapter
 import com.example.rickmortyalbum.databinding.FragmentEpisodeInfoBinding
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class EpisodeInfoFragment : Fragment() {
@@ -18,6 +20,8 @@ class EpisodeInfoFragment : Fragment() {
     private val args: EpisodeInfoFragmentArgs by navArgs()
     private lateinit var charactersListAdapter: CharactersListAdapter
     private lateinit var fragmentEpisodeInfoBinding: FragmentEpisodeInfoBinding
+    private val disposables: CompositeDisposable = CompositeDisposable()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,15 +47,20 @@ class EpisodeInfoFragment : Fragment() {
         fragmentEpisodeInfoBinding.episodeNameTV.text = args.episode.name
         fragmentEpisodeInfoBinding.episodeAirDateTV.text = args.episode.air_date
         fragmentEpisodeInfoBinding.episodeTV.text = args.episode.episode
-        viewModel.charactersData.observe(viewLifecycleOwner, {
-            charactersListAdapter.submitList(it)
-            fragmentEpisodeInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
-        })
         viewModel.progressLiveData.observe(viewLifecycleOwner, {
             fragmentEpisodeInfoBinding.simpleProgressBar.progress = it
         })
 
-        viewModel.getCharactersWithID(args.episode.characters)
+        disposables.add(viewModel.getCharactersWithID(args.episode.characters).subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io()).subscribe {
+            charactersListAdapter.submitList(it)
+            fragmentEpisodeInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
+        })
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 }

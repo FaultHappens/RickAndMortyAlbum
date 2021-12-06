@@ -4,25 +4,22 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.flowable
 import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.db.CharactersDBRepository
 import com.example.rickmortyalbum.retriever.DataRetriever
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CharactersViewModel(application: Application,
                           private val repository: CharactersDBRepository,
                           private val dataRetriever: DataRetriever) : AndroidViewModel(application) {
-
-    val charactersData: MutableLiveData<MutableList<CharacterData>> by lazy {
-        MutableLiveData<MutableList<CharacterData>>()
-    }
 
 
     val progressLiveData: MutableLiveData<Int> by lazy {
@@ -31,15 +28,11 @@ class CharactersViewModel(application: Application,
 
     val characters = mutableListOf<CharacterData>()
 
-//    fun getCharacters(): Flow<PagingData<CharacterData>> {
-//        return dataRetriever.getCharacters().cachedIn(viewModelScope)
-//    }
-
     fun getCharacters(): Flowable<PagingData<CharacterData>> {
         return dataRetriever.getCharacters().flowable
     }
 
-    fun getCharactersWithID(characterUrls: List<String>) {
+    fun getCharactersWithID(characterUrls: List<String>) : Flowable<MutableList<CharacterData>> {
         progressLiveData.value = 0
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,8 +42,9 @@ class CharactersViewModel(application: Application,
                 if (character == null) {
                     Log.d("LOL", "Getting character from API")
                     character = dataRetriever.getCharacterWithID(characterID.toString())
-                    characters.add(character)
                     repository.insert(character)
+                    characters.add(character)
+
                 } else {
                     Log.d("LOL", "Getting character from DB")
                     characters.add(character)
@@ -61,7 +55,8 @@ class CharactersViewModel(application: Application,
                 }
             }
             withContext(Dispatchers.Main) {
-                charactersData.value = characters as ArrayList<CharacterData>
+                return characters.asFlow()
+//                charactersData.value = characters as ArrayList<CharacterData>
             }
         }
     }
