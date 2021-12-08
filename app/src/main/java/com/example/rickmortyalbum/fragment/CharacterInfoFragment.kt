@@ -1,6 +1,7 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.adapter.EpisodesListAdapter
 import com.example.rickmortyalbum.databinding.FragmentCharacterInfoBinding
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class CharacterInfoFragment : Fragment() {
@@ -20,6 +23,7 @@ class CharacterInfoFragment : Fragment() {
     private val args: CharacterInfoFragmentArgs by navArgs()
     private lateinit var fragmentCharacterInfoBinding: FragmentCharacterInfoBinding
     private lateinit var episodesListAdapter: EpisodesListAdapter
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
 
     override fun onCreateView(
@@ -60,7 +64,20 @@ class CharacterInfoFragment : Fragment() {
                 .load(args.character.image)
                 .into(fragmentCharacterInfoBinding.characterImageIV)
         }
-        viewModel.getEpisodesDataWithID(args.character.episode)
+        viewModel.getEpisodesDataWithID(args.character.episode)?.subscribeOn(
+            Schedulers.io())
+            ?.observeOn(Schedulers.io())?.let {
+                disposables.add(
+                it.subscribe {
+                    Log.d("LOL", "Submitting list of ${it.toString()}")
+                    episodesListAdapter.submitList(it)
+                    fragmentCharacterInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
+                })
+            }
 
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 }

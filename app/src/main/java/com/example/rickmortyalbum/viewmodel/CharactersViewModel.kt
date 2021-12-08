@@ -12,53 +12,54 @@ import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.db.CharactersDBRepository
 import com.example.rickmortyalbum.retriever.DataRetriever
 import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.internal.util.HalfSerializer.onNext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CharactersViewModel(application: Application,
-                          private val repository: CharactersDBRepository,
-                          private val dataRetriever: DataRetriever) : AndroidViewModel(application) {
+class CharactersViewModel(
+    application: Application,
+    private val repository: CharactersDBRepository,
+    private val dataRetriever: DataRetriever
+) : AndroidViewModel(application) {
 
 
     val progressLiveData: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
 
-    val characters = mutableListOf<CharacterData>()
+
 
     fun getCharacters(): Flowable<PagingData<CharacterData>> {
         return dataRetriever.getCharacters().flowable
     }
 
-    fun getCharactersWithID(characterUrls: List<String>) : Flowable<MutableList<CharacterData>> {
+    fun getCharactersWithID(characterUrls: List<String>): Observable<MutableList<CharacterData>>{
         progressLiveData.value = 0
-
-        viewModelScope.launch(Dispatchers.IO) {
-            for (i in characterUrls) {
-                val characterID: Int = i.substring(CHARACTER_ID_START_INDEX).toInt()
-                var character: CharacterData? = repository.getById(characterID)
-                if (character == null) {
-                    Log.d("LOL", "Getting character from API")
-                    character = dataRetriever.getCharacterWithID(characterID.toString())
-                    repository.insert(character)
-                    characters.add(character)
-
-                } else {
-                    Log.d("LOL", "Getting character from DB")
-                    characters.add(character)
+        val characters = mutableListOf<CharacterData>()
+        for (i in characterUrls) {
+            val characterID: Int = i.substring(CHARACTER_ID_START_INDEX).toInt()
+            //var character: CharacterData? = repository.getById(characterID)
+            var character: CharacterData? = null
+            if (character == null) {
+                Log.d("LOL", "Getting character from API")
+                dataRetriever.getCharacterWithID(characterID.toString()) { response ->
+                    character = response
                 }
-                withContext(Dispatchers.Main) {
-                    progressLiveData.value =
-                        progressLiveData.value?.plus(100 / characterUrls.count())
-                }
+                character?.let { repository.insert(it) }
+                character?.let { characters.add(it) }
+
+            } else {
+                Log.d("LOL", "Getting character from DB")
+                characters.add(character!!)
             }
-            withContext(Dispatchers.Main) {
-                return characters.asFlow()
-//                charactersData.value = characters as ArrayList<CharacterData>
-            }
+            progressLiveData.value =
+                progressLiveData.value?.plus(100 / characterUrls.count())
+
         }
+        return Observable.just(characters)
     }
 
 
