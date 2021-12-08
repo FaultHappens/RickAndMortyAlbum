@@ -1,6 +1,7 @@
 package com.example.rickmortyalbum.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyalbum.adapter.CharactersListAdapter
+import com.example.rickmortyalbum.data.CharacterData
+import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.databinding.FragmentEpisodeInfoBinding
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
+import io.reactivex.schedulers.Schedulers
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class EpisodeInfoFragment : Fragment() {
@@ -43,15 +47,25 @@ class EpisodeInfoFragment : Fragment() {
         fragmentEpisodeInfoBinding.episodeNameTV.text = args.episode.name
         fragmentEpisodeInfoBinding.episodeAirDateTV.text = args.episode.air_date
         fragmentEpisodeInfoBinding.episodeTV.text = args.episode.episode
-        viewModel.charactersData.observe(viewLifecycleOwner, {
-            charactersListAdapter.submitList(it)
-            fragmentEpisodeInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
-        })
         viewModel.progressLiveData.observe(viewLifecycleOwner, {
             fragmentEpisodeInfoBinding.simpleProgressBar.progress = it
         })
 
-        viewModel.getCharactersWithID(args.episode.characters)
+
+        val list = mutableListOf<CharacterData>()
+        for (i in args.episode.characters) {
+            val dispose = viewModel.getCharactersWithID(i.substring(CharactersViewModel.CHARACTER_ID_START_INDEX)).subscribeOn(
+                Schedulers.io()).observeOn(Schedulers.io()).subscribe({
+                list.add(it)
+                charactersListAdapter.submitList(list)
+                fragmentEpisodeInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
+            }, {
+                Log.d("LOL", it.toString())
+            }, {
+                TODO()
+            })
+            dispose.dispose()
+        }
 
     }
 }

@@ -4,8 +4,10 @@ import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.CharactersPageData
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.data.EpisodesPageData
+import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
@@ -16,9 +18,9 @@ interface API {
     @GET("character")
     suspend fun getCharactersAPI(@Query("page") page: Int): Response<CharactersPageData>
 
-    @GET
-    suspend fun getCharacterAPI(@Url url: String): CharacterData
+    @GET("character/{id}")
+    fun getCharacterAPI(@Path("id") id: String): Observable<CharacterData>
 
-    @GET
-    suspend fun getEpisodeAPI(@Url url: String): EpisodeData
+    @GET("episode/{id}")
+    fun getEpisodeAPI(@Path("id") id: String): Observable<EpisodeData>
 }
