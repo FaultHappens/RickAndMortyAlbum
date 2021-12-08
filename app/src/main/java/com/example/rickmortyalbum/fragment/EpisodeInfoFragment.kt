@@ -14,6 +14,8 @@ import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.databinding.FragmentEpisodeInfoBinding
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -52,20 +54,36 @@ class EpisodeInfoFragment : Fragment() {
         })
 
 
-        val list = mutableListOf<CharacterData>()
+        val list: MutableList<CharacterData> = mutableListOf()
         for (i in args.episode.characters) {
-            val dispose = viewModel.getCharactersWithID(i.substring(CharactersViewModel.CHARACTER_ID_START_INDEX)).subscribeOn(
-                Schedulers.io()).observeOn(Schedulers.io()).subscribe({
-                list.add(it)
-                charactersListAdapter.submitList(list)
-                fragmentEpisodeInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
-            }, {
-                Log.d("LOL", it.toString())
-            }, {
-                TODO()
+            val dispose = viewModel.getCharactersWithID(i.substring(CHARACTER_ID_START_INDEX)).subscribeOn(Schedulers.io()).observeOn(
+                Schedulers.io()).subscribe(object: Observer<CharacterData> {
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: CharacterData) {
+                    Log.d("1234", t.toString())
+                    list.add(t)
+                    charactersListAdapter.updateList(t)
+                    charactersListAdapter.notifyDataSetChanged()
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.d("LOL", e.toString())
+                }
+
+                override fun onComplete() {
+
+                }
+
             })
-            dispose.dispose()
+
         }
 
+
+    }
+    companion object {
+        const val CHARACTER_ID_START_INDEX = 42
     }
 }
