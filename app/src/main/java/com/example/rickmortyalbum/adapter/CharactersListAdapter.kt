@@ -33,7 +33,6 @@ class CharactersListAdapter(
         Log.d("deb", list[position].toString())
         holder.bind(list[position])
     }
- ქულზე გავიდეთ მაშინ
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {
         binding = CharacterCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersListViewHolder(binding)
