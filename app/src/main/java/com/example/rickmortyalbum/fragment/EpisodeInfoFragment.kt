@@ -66,7 +66,6 @@ class EpisodeInfoFragment : Fragment() {
                     Log.d("1234", t.toString())
                     list.add(t)
                     charactersListAdapter.updateList(t)
-                    charactersListAdapter.notifyDataSetChanged()
                 }
 
                 override fun onError(e: Throwable) {
