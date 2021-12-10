@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -40,11 +41,7 @@ class CharacterInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         episodesListAdapter = EpisodesListAdapter { item ->
-            Navigation.findNavController(view).navigate(
-                CharacterInfoFragmentDirections.actionCharacterInfoFragmentToEpisodeInfoFragment(
-                    item
-                )
-            )
+            navigate(view, item)
         }
         fragmentCharacterInfoBinding.recyclerView.layoutManager =
             LinearLayoutManager(activity?.applicationContext)
@@ -53,29 +50,29 @@ class CharacterInfoFragment : Fragment() {
     }
 
     private fun initInfoPage() {
-        fragmentCharacterInfoBinding.characterGenderTV.text = args.character.gender
-        fragmentCharacterInfoBinding.characterNameTV.text = args.character.name
-        fragmentCharacterInfoBinding.characterSpeciesTV.text = args.character.species
-        fragmentCharacterInfoBinding.characterStatusTV.text = args.character.status
-        context?.let {
-            Glide.with(it)
-                .load(args.character.image)
-                .into(fragmentCharacterInfoBinding.characterImageIV)
+        with(fragmentCharacterInfoBinding) {
+            characterGenderTV.text = args.character.gender
+            characterNameTV.text = args.character.name
+            characterSpeciesTV.text = args.character.species
+            characterStatusTV.text = args.character.status
+            characterImageIV.setImageFromUrl(args.character.image)
+            viewModel.episodesData.observe(viewLifecycleOwner, {
+                episodesListAdapter.submitList(it)
+                simpleProgressBar.visibility = View.INVISIBLE
+            })
+            viewModel.progressLiveData.observe(viewLifecycleOwner, {
+                simpleProgressBar.progress = it
+            })
         }
 
 
-        viewModel.episodesData.observe(viewLifecycleOwner, {
-            episodesListAdapter.submitList(it)
-            fragmentCharacterInfoBinding.simpleProgressBar.visibility = View.INVISIBLE
-        })
-        viewModel.progressLiveData.observe(viewLifecycleOwner, {
-            fragmentCharacterInfoBinding.simpleProgressBar.progress = it
-        })
 
         val list = mutableListOf<EpisodeData>()
         for (i in args.character.episode) {
-            val dispose = viewModel.getEpisodesDataWithID(i.substring(EPISODE_ID_START_INDEX)).subscribeOn(Schedulers.io()).observeOn(
-                Schedulers.io()).subscribe(object: Observer<EpisodeData>{
+            val dispose = viewModel.getEpisodesDataWithID(i.substring(EPISODE_ID_START_INDEX))
+                .subscribeOn(Schedulers.io()).observeOn(
+                Schedulers.io()
+            ).subscribe(object : Observer<EpisodeData> {
                 override fun onSubscribe(d: Disposable) {
 
                 }
@@ -99,8 +96,24 @@ class CharacterInfoFragment : Fragment() {
         }
 
 
-
     }
+
+    fun navigate(view: View, item: EpisodeData){
+        Navigation.findNavController(view).navigate(
+            CharacterInfoFragmentDirections.actionCharacterInfoFragmentToEpisodeInfoFragment(
+                item
+            )
+        )
+    }
+
+    fun ImageView.setImageFromUrl(url: String){
+        context?.let {
+            Glide.with(context)
+                .load(url)
+                .into(this)
+        }
+    }
+
     companion object {
         private const val EPISODE_ID_START_INDEX = 40
     }

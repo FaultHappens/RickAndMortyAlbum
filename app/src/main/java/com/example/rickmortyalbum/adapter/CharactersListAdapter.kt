@@ -4,8 +4,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.R
@@ -27,7 +25,6 @@ class CharactersListAdapter(
 
     override fun onBindViewHolder(holder: CharactersListViewHolder, position: Int) {
         holder.itemView.setOnClickListener { listener(list[position]) }
-        Log.d("deb", list[position].toString())
         holder.bind(list[position])
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {
