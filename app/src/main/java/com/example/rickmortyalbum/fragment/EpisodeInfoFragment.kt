@@ -34,10 +34,8 @@ class EpisodeInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        charactersListAdapter = CharactersListAdapter {
-            Navigation.findNavController(view).navigate(
-                EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(it)
-            )
+        charactersListAdapter = CharactersListAdapter {item->
+            navigate(view, item)
         }
         fragmentEpisodeInfoBinding.recyclerView.adapter = charactersListAdapter
         fragmentEpisodeInfoBinding.recyclerView.layoutManager =
@@ -46,44 +44,54 @@ class EpisodeInfoFragment : Fragment() {
     }
 
     private fun initInfoPage() {
-        fragmentEpisodeInfoBinding.episodeNameTV.text = args.episode.name
-        fragmentEpisodeInfoBinding.episodeAirDateTV.text = args.episode.air_date
-        fragmentEpisodeInfoBinding.episodeTV.text = args.episode.episode
-        viewModel.progressLiveData.observe(viewLifecycleOwner, {
-            fragmentEpisodeInfoBinding.simpleProgressBar.progress = it
-        })
+        with(fragmentEpisodeInfoBinding) {
+            episodeNameTV.text = args.episode.name
+            episodeAirDateTV.text = args.episode.air_date
+            episodeTV.text = args.episode.episode
+            viewModel.progressLiveData.observe(viewLifecycleOwner, {
+                simpleProgressBar.progress = it
+            })
+        }
 
 
         val list: MutableList<CharacterData> = mutableListOf()
         for (i in args.episode.characters) {
-            val dispose = viewModel.getCharactersWithID(i.substring(CHARACTER_ID_START_INDEX)).subscribeOn(Schedulers.io()).observeOn(
-                Schedulers.io()).subscribe(object: Observer<CharacterData> {
-                override fun onSubscribe(d: Disposable) {
+            val dispose = viewModel.getCharactersWithID(i.substring(CHARACTER_ID_START_INDEX))
+                .subscribeOn(Schedulers.io()).observeOn(
+                    Schedulers.io()
+                ).subscribe(object : Observer<CharacterData> {
+                    override fun onSubscribe(d: Disposable) {
 
-                }
+                    }
 
-                override fun onNext(t: CharacterData) {
-                    Log.d("1234", t.toString())
-                    list.add(t)
-                    charactersListAdapter.updateList(t)
-                    charactersListAdapter.notifyDataSetChanged()
-                }
 
-                override fun onError(e: Throwable) {
-                    Log.d("LOL", e.toString())
-                }
+                    override fun onNext(t: CharacterData) {
+                        Log.d("1234", t.toString())
+                        list.add(t)
+                        charactersListAdapter.updateList(t)
+                    }
 
-                override fun onComplete() {
 
-                }
+                    override fun onError(e: Throwable) {
+                        Log.d("LOL", e.toString())
+                    }
 
-            })
+                    override fun onComplete() {
+
+                    }
+
+                })
 
         }
 
 
     }
+    fun navigate(view: View, item: CharacterData){
+        Navigation.findNavController(view).navigate(
+        EpisodeInfoFragmentDirections.actionEpisodeInfoFragmentToCharacterInfoFragment(item)
+    )}
+
     companion object {
-        const val CHARACTER_ID_START_INDEX = 42
+        private const val CHARACTER_ID_START_INDEX = 42
     }
 }

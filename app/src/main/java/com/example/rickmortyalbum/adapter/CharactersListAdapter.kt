@@ -4,8 +4,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.rickmortyalbum.R
@@ -18,19 +16,15 @@ class CharactersListAdapter(
     RecyclerView.Adapter<CharactersListViewHolder>() {
 
     private lateinit var binding: CharacterCardViewBinding
-    private var list: MutableList<CharacterData> = mutableListOf(CharacterData ("1234", listOf("1234", "1234"), "1234", 1, "1234", "1234", "1234", "1234", "1234","1234"))
+    private var list: MutableList<CharacterData> = mutableListOf()
 
     fun updateList(character: CharacterData){
-        Log.d("12345", character.toString())
         list.add(character)
-        Log.d("123456", list.count().toString())
-
         notifyItemInserted(list.count()-1)
     }
 
     override fun onBindViewHolder(holder: CharactersListViewHolder, position: Int) {
         holder.itemView.setOnClickListener { listener(list[position]) }
-        Log.d("deb", list[position].toString())
         holder.bind(list[position])
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersListViewHolder {

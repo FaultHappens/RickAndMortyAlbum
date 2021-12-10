@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyalbum.adapter.EpisodesPagingListAdapter
+import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.databinding.FragmentEpisodeListBinding
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -49,9 +50,7 @@ class EpisodeListFragment : Fragment() {
         }
         episodesPagingListAdapter = EpisodesPagingListAdapter{item->
             view?.let {
-                Navigation.findNavController(it).navigate(EpisodeListFragmentDirections.actionEpisodeListFragmentToEpisodeInfoFragment(
-                    item
-                ))
+                navigate(it, item)
             }
         }
         disposables.add(episodesViewModel.getEpisodes().subscribeOn(Schedulers.io()).observeOn(
@@ -65,6 +64,11 @@ class EpisodeListFragment : Fragment() {
                 TODO()
             }))
 
+    }
+    fun navigate(view: View, item: EpisodeData){
+        Navigation.findNavController(view).navigate(EpisodeListFragmentDirections.actionEpisodeListFragmentToEpisodeInfoFragment(
+            item
+        ))
     }
     override fun onDestroy() {
         super.onDestroy()
