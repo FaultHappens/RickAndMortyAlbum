@@ -31,3 +31,4 @@ data class CharacterData(
     val type: String,
     val url: String
 ) : Serializable
+

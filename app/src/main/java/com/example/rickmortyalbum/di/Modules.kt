@@ -9,15 +9,20 @@ import com.example.rickmortyalbum.db.EpisodesDBRepository
 import com.example.rickmortyalbum.retriever.DataRetriever
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
 import com.example.rickmortyalbum.viewmodel.EpisodesViewModel
+import com.google.gson.Gson
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val module = module{
-    single { provideAPI(get()) }
-    single { provideRetrofit() }
-    single { DataRetriever(get())}
+    single(override = true, qualifier = named("PagingAPI")) { provideAPIForPaging(get(qualifier = named("Paging"))) }
+    single(override = true, qualifier = named("RxJavaAPI")) { provideAPIForRxJava(get(qualifier = named("RxJava"))) }
+    single(override = true, qualifier = named("Paging")) { provideRetrofitForPager() }
+    single(override = true, qualifier = named("RxJava")) { provideRetrofitForRxJava() }
+    single { DataRetriever(get(qualifier = named("PagingAPI")), get(qualifier = named("RxJavaAPI")))}
 }
 
 val charactersModule = module{
@@ -35,9 +40,18 @@ val episodesModule = module{
     viewModel { EpisodesViewModel(get(), get(), get()) }
 }
 
-fun provideRetrofit(): Retrofit {
-    return Retrofit.Builder().baseUrl("https://rickandmortyapi.com/api/")
+fun provideRetrofitForPager(): Retrofit {
+    return Retrofit.Builder().baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 
-fun provideAPI(retrofit: Retrofit): API = retrofit.create(API::class.java)
+fun provideRetrofitForRxJava(): Retrofit {
+    return Retrofit.Builder().baseUrl(baseUrl)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build()
+}
+
+fun provideAPIForRxJava(retrofit: Retrofit): API = retrofit.create(API::class.java)
+
+fun provideAPIForPaging(retrofit: Retrofit): API = retrofit.create(API::class.java)
+
+private val baseUrl = "https://rickandmortyapi.com/api/"

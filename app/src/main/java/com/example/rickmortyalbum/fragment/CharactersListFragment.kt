@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyalbum.adapter.CharactersPagingListAdapter
+import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.databinding.FragmentCharactersListBinding
 import com.example.rickmortyalbum.viewmodel.CharactersViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -48,13 +49,10 @@ class CharactersListFragment : Fragment() {
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.d("LOL", "TF IS THIS! ${e.toString()}")
         }
-        charactersPagingListAdapter = CharactersPagingListAdapter {
-            view?.let { it1 ->
-                Navigation.findNavController(it1).navigate(
-                    CharactersListFragmentDirections.actionCharactersListFragmentToCharacterInfoFragment(
-                        it
-                    )
-                )
+        charactersPagingListAdapter = CharactersPagingListAdapter {item->
+            view?.let { it ->
+                navigate(it, item)
+
             }
         }
         disposables.add(charactersViewModel.getCharacters().subscribeOn(Schedulers.io())
@@ -69,6 +67,13 @@ class CharactersListFragment : Fragment() {
             })
         )
     }
+
+    private fun navigate(view: View, item: CharacterData){
+        Navigation.findNavController(view).navigate(
+        CharactersListFragmentDirections.actionCharactersListFragmentToCharacterInfoFragment(
+            item
+        )
+    )}
 
     override fun onDestroy() {
         super.onDestroy()

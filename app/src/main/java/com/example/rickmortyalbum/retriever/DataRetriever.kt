@@ -9,17 +9,16 @@ import com.example.rickmortyalbum.data.CharacterData
 import com.example.rickmortyalbum.data.CharactersPagingSource
 import com.example.rickmortyalbum.data.EpisodeData
 import com.example.rickmortyalbum.data.EpisodesPagingSource
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.Flow
 
-class DataRetriever(private val service: API) {
+class DataRetriever(private val serviceForPaging: API, private val serviceForRxJava: API) {
     fun getEpisodes(): Pager<Int, EpisodeData>{
         return Pager(
-            config = PagingConfig(
-                pageSize = 30,
-                enablePlaceholders = false
-            ),
+            getPagingConfig(),
             pagingSourceFactory = {
-                EpisodesPagingSource(service = service)
+                EpisodesPagingSource(service = serviceForPaging)
             }
         )
     }
@@ -28,19 +27,22 @@ class DataRetriever(private val service: API) {
 
     fun getCharacters(): Pager<Int, CharacterData>{
         return Pager(
-            config = PagingConfig(
-                pageSize = 30,
-                enablePlaceholders = false
-            ),
+            getPagingConfig(),
             pagingSourceFactory = {
-                CharactersPagingSource(service = service)
+                CharactersPagingSource(service = serviceForPaging)
             }
         )
     }
 
-    suspend fun getCharacterWithID(id: String): CharacterData =
-        service.getCharacterAPI("character/$id")
+    private fun getPagingConfig(): PagingConfig = PagingConfig(
+        pageSize = 30,
+        enablePlaceholders = false
+    )
 
-    suspend fun getEpisodeWithId(id: String): EpisodeData =
-        service.getEpisodeAPI("episode/$id")
+    fun getCharacterWithID(id: String): Observable<CharacterData> =
+        serviceForRxJava.getCharacterAPI(id)
+
+
+    fun getEpisodeWithID(id: String): Observable<EpisodeData> =
+        serviceForRxJava.getEpisodeAPI(id)
 }
